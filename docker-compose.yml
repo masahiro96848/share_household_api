@@ -19,7 +19,7 @@ services:
     db:
         container_name: db
         environment:
-            - MYSQL_DATABASE=shara_household
+            - MYSQL_DATABASE=share_household
             - MYSQL_USER=user
             - MYSQL_PASSWORD=password
             - MYSQL_ROOT_PASSWORD=password
