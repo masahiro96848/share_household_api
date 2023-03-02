@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+    backend:
+        container_name: backend
+        build: ./docker
+        tty: true
+        depends_on:
+            - db
+        volumes:
+            - ./share_household:/backend
+            - /etc/localtime:/etc/localtime:ro # タイムゾーンを日本時刻に設定
+        environment:
+            TZ: Asia/Tokyo # タイムゾーンを日本時刻に設定
+        ports:
+            - 8080:3000
+        security_opt:
+            - seccomp:unconfined
+        command: sh -c 'npm install && npm run start:dev'
+    db:
+        container_name: db
+        environment:
+            - MYSQL_DATABASE=shara_household
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=password
+            - MYSQL_ROOT_PASSWORD=password
+            - 'TZ=Asia/Tokyo' # タイムゾーンを日本時刻に設定
+        image: mysql:8.0
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+        volumes:
+            - share_household_data:/var/lib/mysql
+            - ./mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+        ports:
+            - 3306:3306
+volumes:
+    share_household_data:
