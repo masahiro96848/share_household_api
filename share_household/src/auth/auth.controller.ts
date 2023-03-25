@@ -18,6 +18,11 @@ import { Csrf, Msg } from './interfaces/auth.interface';
 export class AuthController {
   constructor(private readonly authservice: AuthService) {}
 
+  @Get('/csrf')
+  getCsrfToken(@Req() req: Request): Csrf {
+    return { csrfToken: req.csrfToken() };
+  }
+
   @Post('signup')
   signUp(@Body() signUpDto: SignUpUserDto): Promise<Msg> {
     return this.authservice.signUp(signUpDto);
