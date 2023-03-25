@@ -33,7 +33,7 @@ export class AuthController {
     // cookieを設定していく処理
     res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: 'none',
       path: '/',
     });
