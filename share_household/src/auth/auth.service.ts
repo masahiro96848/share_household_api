@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
-import { SignUpUserDto } from './dto/sign-up-user.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
 import { PrismaService } from 'src/prisma.service';
 import { JwtPayload } from 'src/lib/jwt/interfaces/JwtPayload';
 import { ResponseUserType } from 'src/interfaces/User';
@@ -54,26 +54,26 @@ export class AuthService {
 
   /**
    * 新規登録
-   * @param signUpUserDto
+   * @param registerUserDto
    */
-  async signUp(signUpUserDto: SignUpUserDto) {
+  async register(registerUserDto: RegisterUserDto) {
     const user = await this.prisma.user.findFirst({
       where: {
-        email: signUpUserDto.email,
+        email: registerUserDto.email,
       },
     });
 
     // メールアドレス確認
     if (!!user)
       throw new UnauthorizedException(
-        `${signUpUserDto.email} は別のアカウントで使用されています。`,
+        `${registerUserDto.email} は別のアカウントで使用されています。`,
       );
 
-    const hashPassword = await bcrypt.hash(signUpUserDto.password, 10);
+    const hashPassword = await bcrypt.hash(registerUserDto.password, 10);
     const createdUser = await this.prisma.user.create({
       data: {
-        nickname: signUpUserDto.nickname,
-        email: signUpUserDto.email,
+        nickname: registerUserDto.nickname,
+        email: registerUserDto.email,
         password: hashPassword,
       },
     });

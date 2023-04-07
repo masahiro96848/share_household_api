@@ -11,7 +11,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
-import { SignUpUserDto } from './dto/sign-up-user.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
 import { JwtPayload } from 'src/lib/jwt/interfaces/JwtPayload';
 
 @Controller('auth')
@@ -24,10 +24,10 @@ export class AuthController {
     return await this.authService.login(loginUserDto);
   }
 
-  @Post('signup')
+  @Post('register')
   @HttpCode(201)
-  async signUp(@Body(ValidationPipe) signUpUserDto: SignUpUserDto) {
-    return await this.authService.signUp(signUpUserDto);
+  async register(@Body(ValidationPipe) registerUserDto: RegisterUserDto) {
+    return await this.authService.register(registerUserDto);
   }
 
   @UseGuards(AuthGuard('jwt'))
