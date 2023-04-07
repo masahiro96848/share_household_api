@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { SignInUserDto } from './dto/sign-in-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 import { SignUpUserDto } from './dto/sign-up-user.dto';
 import { PrismaService } from 'src/prisma.service';
 import { JwtPayload } from 'src/lib/jwt/interfaces/JwtPayload';
@@ -16,17 +16,17 @@ export class AuthService {
 
   /**
    * ログイン
-   * @param signInUserDto
+   * @param loginUserDto
    */
-  async signIn(signInUserDto: SignInUserDto) {
+  async login(loginUserDto: LoginUserDto) {
     const user = await this.prisma.user.findFirst({
       where: {
-        email: signInUserDto.email,
+        email: loginUserDto.email,
       },
     });
     if (
       !user ||
-      !(await bcrypt.compare(signInUserDto.password, user.password))
+      !(await bcrypt.compare(loginUserDto.password, user.password))
     ) {
       throw new UnauthorizedException(
         'メールアドレスまたはパスワードが違います。',
